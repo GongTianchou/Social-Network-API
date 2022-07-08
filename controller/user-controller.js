@@ -28,7 +28,7 @@ const userController = {
           .select("-__v")
           .then((dbUserData) => {
             if (!dbUserData) {
-              res.status(404).json({ message: "Did not found the User with this ID" });
+              res.status(404).json({ message: "Did not find the User with this ID" });
               return;
             }
             res.json(dbUserData);
@@ -53,7 +53,7 @@ updateUser({ params, body }, res) {
   })
     .then((dbUser) => {
       if (!dbUser) {
-        res.status(404).json({ message: "Did not found the User with this ID" });
+        res.status(404).json({ message: "Did not find the User with this ID" });
         return;
       }
       res.json(dbUser);
@@ -66,7 +66,7 @@ deleteUser({ params }, res) {
   User.findOneAndDelete({ _id: params.id })
     .then((dbUser) => res.json(dbUser))
     .catch((err) => res.json(err));
-},
+}
 
 addFriend({ params }, res) {
   User.findOneAndUpdate(
@@ -80,3 +80,24 @@ addFriend({ params }, res) {
     })
     .catch((err) => res.status(400).json(err));
 },
+
+deleteFriend({ params }, res) {
+  User.findOneAndUpdate(
+    { _id: params.id },
+    { $pull: { friends: params.friendId } },
+    { new: true }
+  )
+    .populate({ path: "friends", select: "-__v" })
+    .select("-__v")
+    .then((dbUser) => {
+      if (!dbUser) {
+        res.status(404).json({ message: "Did not find the User with this ID" });
+        return;
+      }
+      res.json(dbUser);
+    })
+    .catch((err) => res.status(400).json(err));
+},
+}
+
+module.exports = userController;
