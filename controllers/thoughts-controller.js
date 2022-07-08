@@ -1,6 +1,7 @@
 const { Thoughts, User } = require("../models");
 
 const thoughtController = {
+
   getAllThoughts(req, res) {
     Thoughts.find({})
       .select("-__v")
@@ -10,6 +11,7 @@ const thoughtController = {
         res.sendStatus(400);
       });
   },
+
 
   getThoughtsById({ params }, res) {
     Thoughts.findOne({ _id: params.id })
@@ -27,6 +29,8 @@ const thoughtController = {
         res.status(400).json(err);
       });
   },
+
+  
 
   createThoughts({ params, body }, res) {
     Thoughts.create(body)
@@ -47,6 +51,7 @@ const thoughtController = {
       .catch((err) => res.json(err));
   },
 
+ 
   updateThought({ params, body }, res) {
     Thoughts.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then((dbThoughtData) => {
@@ -59,19 +64,21 @@ const thoughtController = {
       .catch((err) => res.status(400).json(err));
   },
 
+
   deleteThought({ params }, res) {
     Thoughts.findOneAndDelete({ _id: params.id })
       .then((dbThoughtData) => {
         if (!dbThoughtData) {
           res
             .status(404)
-            .json({ message: "There is no thought with this ID. ⛔" });
+            .json({ message: "Did not find any thoughts with the ID" });
           return;
         }
         res.json(dbThoughtData);
       })
       .catch((err) => res.status(400).json(err));
   },
+
   ThoughtReaction({ params, body }, res) {
     Thoughts.findOneAndUpdate(
       { _id: params.thoughtId },
@@ -84,7 +91,7 @@ const thoughtController = {
         if (!dbThoughts) {
           res
             .status(404)
-            .json({ message: "No thoughts with this particular ID!" });
+            .json({ message: "Did not find any thoughts with the ID" });
           return;
         }
         res.json(dbThoughts);
@@ -104,7 +111,7 @@ const thoughtController = {
         if (!dbThoughts) {
           res
             .status(404)
-            .json({ message: "No thoughts with this particular ID!" });
+            .json({ message: "Did not find any thoughts with the ID" });
           return;
         }
       })
