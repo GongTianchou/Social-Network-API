@@ -66,7 +66,7 @@ deleteUser({ params }, res) {
   User.findOneAndDelete({ _id: params.id })
     .then((dbUser) => res.json(dbUser))
     .catch((err) => res.json(err));
-}
+},
 
 addFriend({ params }, res) {
   User.findOneAndUpdate(
